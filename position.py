@@ -21,7 +21,7 @@ class Position(object):
         self.profit_perc = self.calculate_profit_perc(self.exposure)
 
     def calculate_pips(self):
-        getcontext.prec = 6
+        getcontext().prec = 6
         mult = Decimal('1')
         if self.position_type == "long":
             mult = Decimal('1')
@@ -30,6 +30,12 @@ class Position(object):
         return (mult*(self.cur_price - self.avg_price)).quantize(
                 Decimal("0.00001"), ROUND_HALF_DOWN
                 )
+    
+    def calculate_profit_base(self, exposure):
+        pips = self.calculate_pips()        
+        return (pips * exposure / self.cur_price).quantize(
+                Decimal("0.00001"), ROUND_HALF_DOWN
+                 )
 
     def calculate_profit_perc(self, exposure):
         pips = self.calculate_pips()

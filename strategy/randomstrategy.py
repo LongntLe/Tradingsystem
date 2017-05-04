@@ -1,6 +1,6 @@
 import random
 
-from event import OrderEvent
+from event import SignalEvent
 
 class TestRandomStrategy(object):
     def __init__(self, instrument, units, events):
