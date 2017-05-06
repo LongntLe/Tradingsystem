@@ -9,7 +9,7 @@ from strategy.randomstrategy import TestRandomStrategy
 from strategy.momentum import momentumstrat
 from streaming import StreamingForexPrices
 
-def trade(events, strategy, portfolio, execution):
+def trade(events, strategy, execution): #temporarily remove portfolio
     while True:
         try:
             event = events.get(False)
@@ -19,8 +19,8 @@ def trade(events, strategy, portfolio, execution):
             if event is not None:
                 if event.type == "TICK":
                     strategy.calculate_signals(event)
-                elif event.type == "SIGNAL":
-                    portfolio.execute_signal(event)
+                #elif event.type == "SIGNAL":
+                #    portfolio.execute_signal(event)
                 elif event.type == "ORDER":
                     print("Executing order!")
                     execution.execute_order(event)
@@ -42,9 +42,9 @@ if __name__ == "__main__":
 
     execution = Execution(API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID)
 
-    strategy = TestRandomStrategy(instrument, units, events)
+    strategy = momentumstrat(instrument, units, events)
 
-    trade_thread = threading.Thread(target=trade, args=(events, strategy, portfolio, execution))
+    trade_thread = threading.Thread(target=trade, args=(events, strategy, execution)) #temporarily remove portfolio
     
     price_thread = threading.Thread(target=prices.stream_to_queue, args=[])
 
