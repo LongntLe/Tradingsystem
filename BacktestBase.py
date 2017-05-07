@@ -13,7 +13,7 @@ class BacktestBase(object):
         self.units = 0
         self.position = 0
         self.trades = 0
-        self.verbose = True
+        self.fullreport = True
         self.get_data()
         #TODO: get command line input
 

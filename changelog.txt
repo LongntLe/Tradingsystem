@@ -134,3 +134,9 @@ regardless for future strategies.
 
 28/04/2017
 update position.py using Decimal
+
+06/05/2017
+turn new_hist.py into a module for implementation in BacktestBase.py 
+new change: mv new_hist.py price_retrieval.py
+Problem:
+- Not tested. Need debug. 
