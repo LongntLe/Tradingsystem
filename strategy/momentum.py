@@ -7,6 +7,8 @@ Lack position management class,
 which would be added later
 along with some modifications in this strat
 """
+
+
 class momentumstrat(object):
     def __init__(self, instrument, units, events):
         self.instrument = instrument
@@ -14,6 +16,16 @@ class momentumstrat(object):
         self.events = events
         self.ticks = 0
         self.data = pd.DataFrame()
+
+    def initialize(self, event):
+        self.position = 0
+        if event.type == "TICK":
+            self.ticks += 1
+            self.data = self.data.append(
+                    pd.DataFrame({"ticks": [self.ticks], "time": [event.time], "ask": [event.ask]}))
+            self.data.index = pd.DatetimeIndex(self.data["time"])
+            resam = self.data.resample("5S").last()
+        return resam
 
     def calculate_signals(self, event):
         self.position = 0
@@ -23,6 +35,7 @@ class momentumstrat(object):
                     pd.DataFrame({"ticks": [self.ticks], "time": [event.time], "ask": [event.ask]}))
             self.data.index = pd.DatetimeIndex(self.data["time"])
             resam = self.data.resample("5S").last()
+            # collect data frame
             resam["returns"] = np.log(resam["ask"]/resam["ask"].shift(1))
             resam["position"] = np.sign(
                     resam["returns"].rolling(12).mean()).dropna() #TODO: add self.momentum = timeframe
@@ -58,3 +71,5 @@ class momentumstrat(object):
                              )
                 self.position = -1
                 self.events.put(order)
+
+    
