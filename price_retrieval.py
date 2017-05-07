@@ -27,7 +27,6 @@ ctx = v20.Context(
 	)
 
 response = ctx.account.instruments(config['oanda_v20']['account_id'])
-r = response.get('instruments')
 suffix = '.000000000Z'
 
 def get_data(instrument: str, start_date: str, end_date: str): #TODO:raise errors if not the rt type
@@ -54,14 +53,14 @@ def get_data(instrument: str, start_date: str, end_date: str): #TODO:raise error
 		    fromTime = d1,
 		    toTime = d2,
 	        granularity = 'S5',
-            price = 'BA' #TODO: get MBA prices
+            price = 'A' #TODO: get MBA prices
             )
 	    data = candle.get('candles')
 	    data = [cs.dict() for cs in data] #turn data into dict, pretty important
     for cs in data:
         cs.update(cs['ask'])
-        cs.update(cs['bid'])
-        #del cs['ask']
+        #cs.update(cs['bid'])
+        del cs['ask']
     Kappa = pd.DataFrame(data)
     prices = prices.append(Kappa)
 
@@ -72,7 +71,7 @@ def get_data(instrument: str, start_date: str, end_date: str): #TODO:raise error
     prices["time"] = pd.to_datetime(prices["time"])
     prices = prices.set_index("time")
     prices.index = pd.DatetimeIndex(prices.index)
-    prices.to_hdf("%s.h5" %instrument, "data", format="table")
+    prices.to_hdf("./database/%s.h5" %instrument, "data", format="table")
 
 """
 #Testing dataviz configuration
