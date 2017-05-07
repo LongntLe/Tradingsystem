@@ -2,16 +2,21 @@
 #R/S test
 import matplotlib.pyplot as py  
 from numpy import *
+from scipy.stats import norm
 import statsmodels.tsa.stattools as ts
+import johansen
 
 '''
     in statsmodels, we have the following tests:
     - ADF
+    - Sharpe ratio
 
+    in johansen, we have the johansen test for cointegration
+    remember to pip3 install johansen
 '''
 
-def hurst(p):  
-    tau = []; lagvec = []  
+def hurst(p):  # p is the dataframe or list
+    tau = []; lagvec = []
     #  Step through the different lags  
     for lag in range(2,20):  
         #  produce price difference with lag  
@@ -36,10 +41,15 @@ def test_hurst():
         #p = log10(cumsum(random.randn(50000))+1000) # random walk, hurst ~ 0.5  
         print hurst(p) 
 
-def CADF():
+def CAPM(): #capital asset pricing model
+    
+    r_a = r_f + b*(r_m - r_f)
+    return
 
+
+def CADF():
     pass
 
-def Johansen():
+def CAPR():
+    pass
 
-	pass
