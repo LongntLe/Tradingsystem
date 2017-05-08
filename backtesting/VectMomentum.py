@@ -9,7 +9,7 @@ from pandas_datareader import data as web
 #data = new_hist.export() # retrieve historical data
 lookback = [1,5,10,25,60,120]
 holddays = [1,5,10,25,60,120]
-transcost = []
+tcost = [0, 0.001, 0.002, 0.003, 0.004, 0.005] # transaction cost
 
 data = web.DataReader('AAPL', data_source='yahoo',end='2016-10-31')['Adj Close'] #get data, could be anything
 data = pd.DataFrame(data)
@@ -44,20 +44,41 @@ class MomentumVectBacktest(object):
 		raw = pd.DataFrame(raw)
 		raw.rename(columns={'Adj Close': 'price'}, inplace=True)
 		raw['return'] = np.log(raw/raw.shift(1))
-		self.data = raw
+		np.sign(raw['return']) # get the position
+		self.data = raw # get raw data
 
 	def run_strategy(self, momentum = 1):
-		self.momentum = momentum # probably the sign
+		self.momentum = momentum
 		data = self.data.copy()
-		data['position'] = np.sign(data['returns'].rolling(m).mean())
+		data['position'] = np.sign(data['returns'].rolling(m).mean()) # get momentum
 		data['strategy'] = data['position'].shift(1)*data['returns']
 		# determine when a trade takes place
-
-	def momentumsign(data, ticks):
-		if self.results is None:
-			print('No result to plot yet')
-		
+		trades = data['position'].diff().fillna(0) != 0
+		# subtract transaction costs from return when trade takes place
+		data['strategy'][trades] -= self.tc
+		data['creturns'] = self.amount * data['return'].cumsum().apply(np.exp)
+		data['cstrategy'] = self.amount * data['strategy'].cumsum().apply(np.exp)
+		self.results = data
+		# absolute performance of the strategy
+		aperf = self.results['cstrategy'].ix[-1]
+		# out-/underperformance of strategy
+		operf = aperf - self.results['creturns'].ix[-1]
+		return round(aperf, 2), round(operf, 2)
 
 	def plot_results(self):
-		pass
+		if self.results is None:
+			print('No result to plot yet')
+		title = '%s | TC = %.4f' % (self.symbol, self.tc)
+		self.results[['creturns','cstrategy']].plot(title=title,figsize=(10,6))
+
+'''
+A few notes:
+- First we need to determine the sign of the momentum, the easiest way to do this was
+to get the sign of the return, but we can also get the sign of m latest return, therefore,
+we use rolling(m)
+- m here can be understood as lookback period? Is there another way to model lookback period?
+
+Will need to learn how to plot stuff
+
+'''
 
