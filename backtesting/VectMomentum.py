@@ -11,6 +11,7 @@ lookback = [1,5,10,25,60,120]
 holddays = [1,5,10,25,60,120]
 tcost = [0, 0.001, 0.002, 0.003, 0.004, 0.005] # transaction cost
 
+'''
 data = web.DataReader('AAPL', data_source='yahoo',end='2016-10-31')['Adj Close'] #get data, could be anything
 data = pd.DataFrame(data)
 
@@ -28,8 +29,10 @@ for m in ticks:
 	data['position_%d' % m] = np.sign(data['returns'].rolling(m).mean())
 	data['strategy_%d' % m] = data['position_%d' % m].shift(1)*data['returns']
 	to_plot.append('strategy_%d' % m)
+'''
+# temporary obsolette
 
-class MomentumVectBacktest(object):
+class MomVectBacktest(object):
 	def __init__(self, symbol, start, end, amount, tc):
 		self.symbol = symbol
 		self.start = start # start date
@@ -50,8 +53,8 @@ class MomentumVectBacktest(object):
 	def run_strategy(self, momentum = 1):
 		self.momentum = momentum
 		data = self.data.copy()
-		data['position'] = np.sign(data['returns'].rolling(m).mean()) # get momentum
-		data['strategy'] = data['position'].shift(1)*data['returns']
+		data['position'] = np.sign(data['return'].rolling(momentum).mean()) # get momentum
+		data['strategy'] = data['position'].shift(1)*data['return']
 		# determine when a trade takes place
 		trades = data['position'].diff().fillna(0) != 0
 		# subtract transaction costs from return when trade takes place
@@ -70,6 +73,15 @@ class MomentumVectBacktest(object):
 			print('No result to plot yet')
 		title = '%s | TC = %.4f' % (self.symbol, self.tc)
 		self.results[['creturns','cstrategy']].plot(title=title,figsize=(10,6))
+
+if __name__ == '__main__':
+	mombt = MomVectBacktest('AAPL','2010-1-1','2016-10-31',10000, tcost[0])
+	print(mombt.run_strategy())
+	print(mombt.run_strategy(momentum=2))
+	for i in range(1,len(tcost)):
+		mombt = MomVectBacktest('AAPL','2010-1-1','2016-10-31',10000, tcost[i])
+		print(mombt.run_strategy(momentum=2))
+
 
 '''
 A few notes:

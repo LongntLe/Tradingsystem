@@ -51,7 +51,7 @@ pip3 install Oanda
 ```
 pip3 install scipy
 ```
-- statsmodels
+- statsmodels (for statistics indicators)
 ```
 pip3 install statsmodels
 ```
@@ -61,7 +61,7 @@ pip3 install queuelib
 ```
 - time
 - threading
+- seaborn (for data visualization)
 
 ## Other
-Contact long.le@minerva.kgi.edu and hoang.nguyen@minerva.kgi.edu for more details
-Task distribution will be according to project list google sheets file.
+Contact long.le@minerva.kgi.edu and hoang.nguyen@minerva.kgi.edu for more details. Task distribution will be according to project list google sheets file.

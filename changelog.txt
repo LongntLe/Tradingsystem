@@ -158,3 +158,4 @@ Problem:
 *VectMomentum.py
 - Not finished, needs parameterizing and change yahoo data with Oanda data
 - Needs to find a way to export to files or plots
+- The code is extremely slow, it takes 11 seconds for 5 tcost data points
