@@ -11,15 +11,18 @@ Two main threads:
 2. strategy.py: analyze TICK events to determine when to enter. output - SIGNAL events.
 
 ### Strategies:
-See strategy folder
+See strategy folder. There are three main strategies
+- Mean-reversion
+- Momentum
+- Moving averages
 
 ### Risk management:
 1. portfolio.py: receive SIGNAL event - conduct risk management. Output - ORDER event. (under dev)
 
 ### Simulation - Backtesting:
 Expectation: modify strategy.py --> strategy_session.py. User could choose to backtest or trade live. 
-would import BacktestBase.py (under dev): output: statistical indicators of strategy's performance. 
-new_hist.py: download data for analysis and building backtests. 
+Would import BacktestBase.py (under dev): output: statistical indicators of strategy's performance. 
+new_hist.py: download historical data for analysis and building backtests. 
 
 ### Evaluation:
 statisticaltest.py: output - statistical analysis to evaluate strategy's performance. 
@@ -61,3 +64,4 @@ pip3 install queuelib
 
 ## Other
 Contact long.le@minerva.kgi.edu and hoang.nguyen@minerva.kgi.edu for more details
+Task distribution will be according to project list google sheets file.
