@@ -28,7 +28,7 @@ Note on Oanda API: http://developer.oanda.com/rest-live-v20/introduction/
 - Must connect using Context method. i.e ctx.Connect(args)
 
 
-### Dependencies
+## Dependencies
 Python 3.5.12 (therefore remember to install Python 3 dependencies)
 
 API used:
@@ -58,4 +58,6 @@ pip3 install queuelib
 ```
 - time
 - threading
-And so on.
+
+## Other
+Contact long.le@minerva.kgi.edu and hoang.nguyen@minerva.kgi.edu for more details
