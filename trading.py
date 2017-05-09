@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     execution = Execution(API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID)
 
-    strategy = momentumstrat(instrument, units, events)
+    strategy = TestRandomStrategy(instrument, units, events)
 
     trade_thread = threading.Thread(target=trade, args=(events, strategy, execution)) #temporarily remove portfolio
     

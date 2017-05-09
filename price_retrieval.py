@@ -54,15 +54,15 @@ def get_data(instrument: str, start_date: str, end_date: str): #TODO:raise error
 		    toTime = d2,
 	        granularity = 'S5',
             price = 'A' #TODO: get MBA prices
-            )
-	    data = candle.get('candles')
-	    data = [cs.dict() for cs in data] #turn data into dict, pretty important
-    for cs in data:
-        cs.update(cs['ask'])
-        #cs.update(cs['bid'])
-        del cs['ask']
-    Kappa = pd.DataFrame(data)
-    prices = prices.append(Kappa)
+            )       
+        data = candle.get('candles')
+        data = [cs.dict() for cs in data] #turn data into dict, pretty important
+        for cs in data:
+            cs.update(cs['ask'])
+                #cs.update(cs['bid'])
+            del cs['ask']
+            Kappa = pd.DataFrame(data)
+            prices = prices.append(Kappa)
 
 #translate the data into dictionary and pandas DataFrame
 

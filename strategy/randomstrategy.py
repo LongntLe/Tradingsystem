@@ -1,6 +1,6 @@
 import random
 
-from event import SignalEvent
+from event import OrderEvent
 
 class TestRandomStrategy(object):
     def __init__(self, instrument, units, events):
@@ -14,6 +14,7 @@ class TestRandomStrategy(object):
         if event.type == "TICK":
             self.ticks += 1
             if self.ticks % 5 == 0:
+                """
                 if self.invested == False:
                     signal = SignalEvent(self.instrument, "market", "buy")
                     self.events.put(signal)
@@ -33,7 +34,7 @@ class TestRandomStrategy(object):
                             self.instrument, -self.units, "market", side
                             )
                 self.events.put(order)
-                """
+                
                 #TODO: trim down side, not needed any more. 
                 #On second thought, wait for implementation of portfolio as we may need to report side
 
