@@ -14,7 +14,7 @@ along with some modifications in this strat
 """
 
 
-class momentumstrat(object):
+class MomentumStrat(object):
     def __init__(self, instrument, units, events):
         self.instrument = instrument
         self.units = units

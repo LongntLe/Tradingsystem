@@ -23,7 +23,6 @@ lookback = [5, 10, 25, 50]
 holddays = [1, 5, 10, 25, 60, 120]
 tcost = [0, 0.00005]  # transaction cost
 
-
 class MomVectBacktest(object):
 	def __init__(self, symbol, start, end, amount, tc):
 		self.symbol = symbol
@@ -83,7 +82,12 @@ class MomVectBacktest(object):
 		title = '%s | TC = %.5f' % (self.symbol, self.tc)
 		self.results[['creturns','cstrategy']].plot(title=title,figsize=(10,6))
 		plt.show()
->>>>>>> unfinished works
+to_plot = ['returns']
+
+for m in ticks:
+    data['position_%d' % m] = np.sign(data['returns'].rolling(m).mean())
+    data['strategy_%d' % m] = data['position_%d' % m].shift(1)*data['returns']
+    to_plot.append('strategy_%d' % m)
 
 
 if __name__ == '__main__':
