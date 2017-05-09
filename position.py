@@ -1,10 +1,11 @@
 from decimal import Decimal, getcontext, ROUND_HALF_DOWN
 
+
 class Position(object):
     def __init__(
-            self, position_type, market, units, 
+            self, position_type, market, units,
             exposure, bid, ask
-            ):
+    ):
         self.position_type = position_type
         self.market = market
         self.units = units
@@ -27,21 +28,21 @@ class Position(object):
             mult = Decimal('1')
         elif self.position_type == "short":
             mult = Decimal("-1")
-        return (mult*(self.cur_price - self.avg_price)).quantize(
-                Decimal("0.00001"), ROUND_HALF_DOWN
-                )
-    
+        return (mult * (self.cur_price - self.avg_price)).quantize(
+            Decimal("0.00001"), ROUND_HALF_DOWN
+        )
+
     def calculate_profit_base(self, exposure):
-        pips = self.calculate_pips()        
+        pips = self.calculate_pips()
         return (pips * exposure / self.cur_price).quantize(
-                Decimal("0.00001"), ROUND_HALF_DOWN
-                 )
+            Decimal("0.00001"), ROUND_HALF_DOWN
+        )
 
     def calculate_profit_perc(self, exposure):
         pips = self.calculate_pips()
         return (pips * exposure / self.cur_price).quantize(
-                Decimal("0.00001"), ROUND_HALF_DOWN
-                )
+            Decimal("0.00001"), ROUND_HALF_DOWN
+        )
 
     def update_position_price(self, bid, ask, exposure):
         if self.position_type == "long":
