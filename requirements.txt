@@ -1,0 +1,7 @@
+numpy
+pandas
+v20
+scipy
+statsmodels
+queuelib
+stock
