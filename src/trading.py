@@ -13,7 +13,6 @@ from src.execution import Execution
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-
 def trade(events, strategy, execution, heartbeat):  # temporarily remove portfolio
     while True:
         try:
