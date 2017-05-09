@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from event import OrderEvent
-from position import Position
+from risk_manager.position import Position
 
 
 class Portfolio(object):
