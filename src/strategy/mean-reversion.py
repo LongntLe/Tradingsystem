@@ -15,7 +15,6 @@ To do:
 '''
 tick_distance = "5S"
 
-
 class meanrevertstrat(object):
     def __init__(self, instrument, units, events):
         self.instrument = instrument
@@ -23,7 +22,6 @@ class meanrevertstrat(object):
         self.events = events
         self.ticks = 0
         self.data = pd.DataFrame()
-
     def calculate_signals(self, event):
         lookback = 20  # look back period length
         self.position = 0
