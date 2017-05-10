@@ -161,3 +161,11 @@ Problem:
 - The code is extremely slow, it takes 11 seconds for 5 tcost data points, 38 seconds for 24 data points
 To do:
 - Plot the results
+
+10/05/2017
+*momentum.py
+- Redirect to new event directory
+- Parameterize momentum
+
+*VectMomentum.py
+- Remove comments

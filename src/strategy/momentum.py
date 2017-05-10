@@ -1,6 +1,11 @@
-from event import OrderEvent
+
 import pandas as pd
 import numpy as np
+
+import sys
+sys.path.insert(0, '../')
+
+from event import OrderEvent
 
 """
 Lack position management class,
@@ -27,7 +32,7 @@ class momentumstrat(object):
             resam = self.data.resample("5S").last()
         return resam
 
-    def calculate_signals(self, event):
+    def calculate_signals(self, event, momentum = 12): # momentum = 12 is just a random number
         self.position = 0
         if event.type == "TICK":
             self.ticks += 1
@@ -38,7 +43,7 @@ class momentumstrat(object):
             # collect data frame
             resam["returns"] = np.log(resam["ask"]/resam["ask"].shift(1))
             resam["position"] = np.sign(
-                    resam["returns"].rolling(12).mean()).dropna() #TODO: add self.momentum = timeframe
+                    resam["returns"].rolling(momentum).mean()).dropna() #TODO: add self.momentum = timeframe
             print(resam[["time", "ask", "returns", "position"]].tail())
 
             if resam["position"].ix[-1] == 1: # last position is higher than previous means
