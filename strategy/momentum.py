@@ -7,7 +7,7 @@ Lack position management class,
 which would be added later
 along with some modifications in this strat
 """
-
+lookback = [1,2,5,10,20]
 
 class momentumstrat(object):
     def __init__(self, instrument, units, events):
@@ -39,6 +39,7 @@ class momentumstrat(object):
             resam["returns"] = np.log(resam["ask"]/resam["ask"].shift(1))
             resam["position"] = np.sign(
                     resam["returns"].rolling(12).mean()).dropna() #TODO: add self.momentum = timeframe
+                    # we can parameterize rolling
             print(resam[["time", "ask", "returns", "position"]].tail())
 
             if resam["position"].ix[-1] == 1: # last position is higher than previous means

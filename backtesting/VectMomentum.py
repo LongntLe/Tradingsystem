@@ -1,7 +1,11 @@
+import sys
+sys.path.insert(0, '../database')
+
 import numpy as np
 import pandas as pd
 from pandas_datareader import data as web
 
+import new_hist
 
 # implement by chapter 4 in pyalgoquant
 
@@ -33,6 +37,9 @@ for m in ticks:
 '''
 # temporary obsolette
 
+
+
+
 class MomVectBacktest(object):
 	def __init__(self, symbol, start, end, amount, tc):
 		self.symbol = symbol
@@ -51,16 +58,19 @@ class MomVectBacktest(object):
 		np.sign(raw['return']) # get the position
 		self.data = raw # get raw data
 
+	def get_data_Oanda(self): # will get data from new_hist.py
+		self.data = new_hist.export()
+
 	def run_strategy(self, momentum = 1):
 		self.momentum = momentum
 		data = self.data.copy()
 		data['position'] = np.sign(data['return'].rolling(momentum).mean()) # get momentum
-		data['strategy'] = data['position'].shift(1)*data['return']
+		data['strategy'] = data['position'].shift(1)*data['return'] # order buy or sell with the quantity of return
 		# determine when a trade takes place
 		trades = data['position'].diff().fillna(0) != 0
 		# subtract transaction costs from return when trade takes place
-		data['strategy'][trades] -= self.tc
-		data['creturns'] = self.amount * data['return'].cumsum().apply(np.exp)
+		data['strategy'][trades] -= self.tc # for each trade, subtract tcost
+		data['creturns'] = self.amount * data['return'].cumsum().apply(np.exp) # take cumsum of return?
 		data['cstrategy'] = self.amount * data['strategy'].cumsum().apply(np.exp)
 		self.results = data
 		# absolute performance of the strategy
@@ -80,7 +90,7 @@ if __name__ == '__main__':
 		print('lookback period %d' %lookback[t])
 		for i in range(len(tcost)):
 			mombt = MomVectBacktest('AAPL','2010-1-1','2016-10-31',10000, tcost[i])
-			print(mombt.run_strategy(momentum=2))
+			print(mombt.run_strategy(momentum=lookback[t]))
 
 
 '''
