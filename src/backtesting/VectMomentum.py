@@ -2,35 +2,18 @@ import numpy as np
 import pandas as pd
 from pandas_datareader import data as web
 
+import matplotlib.pyplot as plt
+
 
 # implement by chapter 4 in pyalgoquant
 
 # we will get data from 2002 to test
 
 #data = new_hist.export() # retrieve historical data
-lookback = [1,2,5,10]
-holddays = [1,5,10,25,60,120]
-tcost = [0, 0.001, 0.002, 0.003, 0.004, 0.005] # transaction cost
+lookback = [1, 2, 5]
+holddays = [1, 5, 10, 25, 60, 120]
+tcost = [0, 0.001, 0.002] # transaction cost
 
-'''
-data = web.DataReader('AAPL', data_source='yahoo',end='2016-10-31')['Adj Close'] #get data, could be anything
-data = pd.DataFrame(data)
-
-data.rename(columns={'Adj Close': 'price'}, inplace=True)
-
-data['returns'] = np.log(data['price']/data['price'].shift(1)) #gets growth rate
-
-data['position'] = np.sign(data['returns']) # identify the direction of momentum
-data['strategy'] = data['position'].shift(1)*data['returns']
-data[['returns','strategy']].dropna().cumsum().apply(np.exp).plot(figsize=(10,6)) # plotting cumulative returns of the time series
-
-to_plot = ['returns']
-
-for m in ticks:
-	data['position_%d' % m] = np.sign(data['returns'].rolling(m).mean())
-	data['strategy_%d' % m] = data['position_%d' % m].shift(1)*data['returns']
-	to_plot.append('strategy_%d' % m)
-'''
 # temporary obsolette
 
 class MomVectBacktest(object):
@@ -74,13 +57,16 @@ class MomVectBacktest(object):
 			print('No result to plot yet')
 		title = '%s | TC = %.4f' % (self.symbol, self.tc)
 		self.results[['creturns','cstrategy']].plot(title=title,figsize=(10,6))
+		plt.show()
+
 
 if __name__ == '__main__':
 	for t in range(len(lookback)):
 		print('lookback period %d' %lookback[t])
 		for i in range(len(tcost)):
-			mombt = MomVectBacktest('AAPL','2010-1-1','2016-10-31',10000, tcost[i])
+			mombt = MomVectBacktest('AAPL','2010-1-1','2016-10-31',10000, tcost[i]) #object
 			print(mombt.run_strategy(momentum=2))
+			mombt.plot_results()
 
 
 '''
