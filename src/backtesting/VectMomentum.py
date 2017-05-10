@@ -89,7 +89,6 @@ for m in ticks:
     data['strategy_%d' % m] = data['position_%d' % m].shift(1)*data['returns']
     to_plot.append('strategy_%d' % m)
 
-
 if __name__ == '__main__':
     for t in range(len(lookback)):
         print('lookback period %d' % lookback[t])
