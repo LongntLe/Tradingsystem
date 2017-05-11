@@ -1,9 +1,10 @@
 from event import TickEvent
+import price_handler
 import v20
 import pandas as pd
 
 
-class StreamingForexPrices(object):
+class StreamingForexPrices(PriceHandler):
     def __init__(
             self, domain, access_token,
             account_id, instruments, events_queue

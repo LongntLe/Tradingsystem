@@ -1,4 +1,4 @@
-import PriceHandler
+import price_handler
 import price_retrieval
 import os.path
 import pandas as pd

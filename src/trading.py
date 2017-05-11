@@ -7,7 +7,7 @@ from settings import STREAM_DOMAIN, API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID
 from risk_manager.portfolio import Portfolio
 from strategy.randomstrategy import TestRandomStrategy
 from strategy.momentum import momentumstrat
-from streaming import StreamingForexPrices
+from price_handler.streaming import StreamingForexPrices
 
 
 def trade(events, strategy, execution):  # temporarily remove portfolio
