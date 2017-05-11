@@ -29,14 +29,20 @@ ctx = v20.Context(
 response = ctx.account.instruments(config['oanda_v20']['account_id'])
 r = response.get('instruments')
 
+def flatten_dict(d):
+    def items():
+        for key, value in d.items():
+            if isinstance(value, dict):
+                for subkey, subvalue in flatten_dict(value).items():
+                    yield key + "." + subkey, subvalue
+            else:
+                yield key, value
+    return dict(items())
 #dateTime formatting
 suffix = '.000000000Z'
-time1 = dt.datetime(2015,1,15,8,0,0)
+time1 = dt.datetime(2005,2,1,0,0,0)
 d1 = time1.isoformat('T') + suffix
-#time2 = dt.datetime(2016,8,2,0,0,0)
-#d2 = time2.isoformat('T') + suffix
-#time_unit = dt.timedelta(1)
-limit = dt.datetime(2015,1,16,16,0,0)
+limit = dt.datetime(2017,5,10,0,0,0)
 limit = limit.isoformat('T') + suffix
 
 #data chunking
@@ -49,24 +55,22 @@ for i in range(len(dates)-1):
             instrument = 'EUR_USD',
             fromTime = d1,
             toTime = d2,
-            granularity = 'S5',
+            granularity = 'S10',
             price = 'MBA'
             )
     data = candle.get('candles')
-    data = [cs.dict() for cs in data] #turn data into dict, pretty important
-    for cs in data:
-        cs.update(cs['ask'])
-        del cs['ask']
+    data = [flatten_dict(cs.dict()) for cs in data] #turn data into dict, pretty important
+
+    print(data)
     Kappa = pd.DataFrame(data)
     prices = prices.append(Kappa)
-
         #translate the data into dictionary and pandas DataFrame
 
-        #create dataframe
-        #prices = pd.DataFrame(data)
-print(prices)
+        #create dataframe    
+#print("data downloaded")
 prices["time"] = pd.to_datetime(prices["time"])
 prices = prices.set_index("time")
 prices.index = pd.DatetimeIndex(prices.index)
 prices.to_hdf("data.h5", "data", format="table")
-
+    
+print("imported data to file\n", pd.HDFStore("data.h5"))
