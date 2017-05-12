@@ -5,7 +5,6 @@ from src.event import OrderEvent
 from src.risk_manager.position import Position
 
 
-
 class Portfolio(object):
     def __init__(
             self, ticker, events, base="GBP", leverage=20,

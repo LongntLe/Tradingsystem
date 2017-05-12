@@ -1,7 +1,10 @@
-from event import TickEvent
-import price_handler
+from src.price_handler.price_handler import PriceHandler
+from src.event import TickEvent
 import v20
-import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class StreamingForexPrices(PriceHandler):
@@ -35,8 +38,8 @@ class StreamingForexPrices(PriceHandler):
         )
         for msg_type, msg in response.parts():
             if msg_type == "pricing.Price":
-            
-                print(msg.instrument, msg.time, msg.asks[0].price, msg.bids[0].price)
+                logger.info('Received a tick! %s %s %s %s' %
+                            (msg.instrument, msg.time, msg.asks[0].price, msg.bids[0].price))
                 instrument = msg.instrument
                 time = msg.time
                 bid = msg.bids[0].price
@@ -45,6 +48,5 @@ class StreamingForexPrices(PriceHandler):
                 self.events_queue.put(tev)
                 self.cur_bid = bid
                 self.cur_ask = ask
-
             elif msg_type == "pricing.Heartbeat":
                 print(msg)

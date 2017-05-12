@@ -103,14 +103,7 @@ to get the sign of the return, but we can also get the sign of m latest return, 
 we use rolling(m)
 - m here can be understood as lookback period? Is there another way to model lookback period?
 
-<<<<<<< HEAD
 Will need to learn how to plot stuff (resolved)
 
 EURUSD symbol seems to be bugged (resolved)
 '''
-=======
-Will need to learn how to plot stuff
-
-'''
-
->>>>>>> bccc905... reorganize modules so relations are clearer. For now some modules are not put into files as they are subject to constant changes in the time being

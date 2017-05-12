@@ -4,7 +4,6 @@ import random
 from src.event import OrderEvent
 
 
-
 class TestRandomStrategy(object):
     def __init__(self, instrument, units, events):
         self.instrument = instrument
