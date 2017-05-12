@@ -1,4 +1,7 @@
-import v20
+import v20, logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Execution(object):
@@ -22,4 +25,5 @@ class Execution(object):
             units=event.units
         )
         order = request.get("orderFillTransaction")
-        print("\n\n", order.dict(), "\n")
+        logger.info("Transaction has been done!")
+        logger.debug("%s" % order.dict())

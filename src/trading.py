@@ -1,16 +1,19 @@
 import queue
 import threading
 import time
+import logging
 
-from execution import Execution
-from settings import STREAM_DOMAIN, API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID
-from risk_manager.portfolio import Portfolio
-from strategy.randomstrategy import TestRandomStrategy
-from strategy.momentum import momentumstrat
-from price_handler.streaming import StreamingForexPrices
+from src.execution import Execution
+from definitions import STREAM_DOMAIN, API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID
+from src.risk_manager.portfolio import Portfolio
+from src.strategy.randomstrategy import TestRandomStrategy
+from src.price_handler.streaming import StreamingForexPrices
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
-def trade(events, strategy, execution):  # temporarily remove portfolio
+def trade(events, strategy, execution, heartbeat):  # temporarily remove portfolio
     while True:
         try:
             event = events.get(False)
@@ -23,12 +26,14 @@ def trade(events, strategy, execution):  # temporarily remove portfolio
                 # elif event.type == "SIGNAL":
                 #    portfolio.execute_signal(event)
                 elif event.type == "ORDER":
-                    print("Executing order!")
+                    logger.info("Executing order")
                     execution.execute_order(event)
         time.sleep(heartbeat)
 
 
 if __name__ == "__main__":
+    logger = logging.getLogger(__name__)
+    logger.debug("Trading Algorithm has started!")
     heartbeat = 0.5
     events = queue.Queue()
 

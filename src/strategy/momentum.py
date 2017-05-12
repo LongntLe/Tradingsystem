@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 
+=======
+from src.event import OrderEvent
+>>>>>>> Add logger. Change setting files. Init packages. Add __main__.
 import pandas as pd
 import numpy as np
 
