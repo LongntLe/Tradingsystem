@@ -1,5 +1,3 @@
-# Oanda historical data
-from __future__ import absolute_import
 import pandas as pd
 
 import datetime as dt
@@ -12,16 +10,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pylab
 
-import sys
+# new_hist.py
 
-sys.path.insert(0, '../statistics/')
-
-import statisticaltest as stat
-
-sys.path.insert(0, '../../')
-
-from definitions import ACCESS_TOKEN, ACCOUNT_ID
-
+config = configparser.ConfigParser()
+config.read('pyalgo.cfg')
+access_token = config['oanda_v20']['access_token']
 
 # v20.context
 ctx = v20.Context(
@@ -29,32 +22,30 @@ ctx = v20.Context(
     443,
     True,
     application='sample_code',
-    token= ACCESS_TOKEN,
+    token=config['oanda_v20']['access_token'],
     datetime_format='RFC3339'
 )
 
-response = ctx.account.instruments(ACCOUNT_ID)
-r = response.get('instruments')
-
+response = ctx.account.instruments(config['oanda_v20']['account_id'])
+suffix = '.000000000Z'
 
 def flatten_dict(d):
     def items():
         for key, value in d.items():
             if isinstance(value, dict):
                 for subkey, subvalue in flatten_dict(value).items():
-                    yield key + "." + subkey, subvalue
+                    yield key + '.' + subkey, subvalue
             else:
-                yield key, value
-
+                return key, value
     return dict(items())
 
-def data_export():
+def get_data(instrument: str, start_date: str, end_date: str):
+    instrument = instrument
+    start_date = dt.datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
+    end_date = dt.datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S")
     # dateTime formatting
-    suffix = '.000000000Z'
-    time1 = dt.datetime(2005, 1, 1, 0, 0, 0)
-    d1 = time1.isoformat('T') + suffix
-    limit = dt.datetime(2005, 1, 10, 0, 0, 0)
-    limit = limit.isoformat('T') + suffix
+    d1 = start_date.isoformat('T') + suffix
+    limit = end_date.isoformat('T') + suffix
 
     # data chunking
     prices = pd.DataFrame()
@@ -63,27 +54,25 @@ def data_export():
         d1 = str(dates[i]).replace(' ', 'T')
         d2 = str(dates[i + 1]).replace(' ', 'T')
         candle = ctx.instrument.candles(
-            instrument='EUR_USD',
+            instrument=instrument,
             fromTime=d1,
             toTime=d2,
             granularity='S10',
-            price='MBA'
+            price='MBA' 
         )
         data = candle.get('candles')
         data = [flatten_dict(cs.dict()) for cs in data]  # turn data into dict, pretty important
-
+        
         Kappa = pd.DataFrame(data)
         prices = prices.append(Kappa)
-    return prices['ask.o']
-    # translate the data into dictionary and pandas DataFrame
 
-    # create dataframe
-# print("data downloaded")
+        # translate the data into dictionary and pandas DataFrame
 
-def tohdf():
+        # create dataframe
+        # prices = pd.DataFrame(data)
+    print("data downloaded successfully")
     prices["time"] = pd.to_datetime(prices["time"])
     prices = prices.set_index("time")
     prices.index = pd.DatetimeIndex(prices.index)
-    prices.to_hdf("data.h5", "data", format="table")
-
-    print("imported data to file\n", pd.HDFStore("data.h5"))
+    prices.to_hdf("./database/%s.h5" % instrument, "data", format="table")
+    print("data imported to file")
