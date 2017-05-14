@@ -169,3 +169,13 @@ To do:
 
 *VectMomentum.py
 - Remove comments
+- Add plots
+
+11/05/2017
+*VectMomentum.py
+- Calls Hurst and MDD to test time series performance
+- Add Forex symbol list
+https://finance.yahoo.com/connection/currency-converter-cache?date=20150307
+
+*statisticaltest.py
+- Add MDD indicator

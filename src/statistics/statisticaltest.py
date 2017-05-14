@@ -23,6 +23,12 @@ def hurst(p):
     # py.plot(lagvec,tau,'o'); show()
     return hurst
 
+def MDD(data, amount):
+    peak = amount
+    trough = amount
+    for i in range(len(data)):
+        pass
+
 
 def Johansen():
     pass
