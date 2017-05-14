@@ -1,5 +1,6 @@
-import price_handler
-import price_retrieval
+from __future__ import absolute_import
+from src.price_handler.price_handler import PriceHandler
+import src.price_retrieval as price_retrieval
 import os.path
 import pandas as pd
 
@@ -22,5 +23,5 @@ class DBPriceHandler(PriceHandler):
             pd.read_hdf("%s.h5" % self.instrument)
 
     def stream_to_queue(self):
-        self.retrieve_prices()
-        for index, row in self
+        self._retrieve_prices()
+        # for index, row in self

@@ -1,5 +1,5 @@
 # Oanda historical data
-
+from __future__ import absolute_import
 import pandas as pd
 
 import datetime as dt
@@ -13,28 +13,30 @@ import seaborn as sns
 import pylab
 
 import sys
+
 sys.path.insert(0, '../statistics/')
 
-import statisticaltest as stat
+import src.statistics.statisticaltest as stat
 
-#new_hist.py
+# new_hist.py
 
 config = configparser.ConfigParser()
 config.read('../pyalgo.cfg')
 access_token = config['oanda_v20']['access_token']
 
-#v20.context
+# v20.context
 ctx = v20.Context(
-        'api-fxpractice.oanda.com',
-        443,
-        True,
-        application='sample_code',
-        token = config['oanda_v20']['access_token'],
-        datetime_format='RFC3339'
-        )
+    'api-fxpractice.oanda.com',
+    443,
+    True,
+    application='sample_code',
+    token=config['oanda_v20']['access_token'],
+    datetime_format='RFC3339'
+)
 
 response = ctx.account.instruments(config['oanda_v20']['account_id'])
 r = response.get('instruments')
+
 
 def flatten_dict(d):
     def items():
@@ -44,43 +46,44 @@ def flatten_dict(d):
                     yield key + "." + subkey, subvalue
             else:
                 yield key, value
+
     return dict(items())
-#dateTime formatting
+
+
+# dateTime formatting
 suffix = '.000000000Z'
-time1 = dt.datetime(2005,1,1,0,0,0)
+time1 = dt.datetime(2005, 1, 1, 0, 0, 0)
 d1 = time1.isoformat('T') + suffix
-limit = dt.datetime(2005,1,10,0,0,0)
+limit = dt.datetime(2005, 1, 10, 0, 0, 0)
 limit = limit.isoformat('T') + suffix
 
-#data chunking
+# data chunking
 prices = pd.DataFrame()
-dates = pd.date_range(start = d1, end = limit, freq = 'D')
-for i in range(len(dates)-1):
+dates = pd.date_range(start=d1, end=limit, freq='D')
+for i in range(len(dates) - 1):
     d1 = str(dates[i]).replace(' ', 'T')
-    d2 = str(dates[i+1]).replace(' ', 'T')
+    d2 = str(dates[i + 1]).replace(' ', 'T')
     candle = ctx.instrument.candles(
-            instrument = 'EUR_USD',
-            fromTime = d1,
-            toTime = d2,
-            granularity = 'S10',
-            price = 'MBA'
-            )
+        instrument='EUR_USD',
+        fromTime=d1,
+        toTime=d2,
+        granularity='S10',
+        price='MBA'
+    )
     data = candle.get('candles')
-    data = [flatten_dict(cs.dict()) for cs in data] #turn data into dict, pretty important
+    data = [flatten_dict(cs.dict()) for cs in data]  # turn data into dict, pretty important
 
     print(data)
     Kappa = pd.DataFrame(data)
     prices = prices.append(Kappa)
-        #translate the data into dictionary and pandas DataFrame
+    # translate the data into dictionary and pandas DataFrame
 
-        #create dataframe    
-#print("data downloaded")
+    # create dataframe
+# print("data downloaded")
 
 prices["time"] = pd.to_datetime(prices["time"])
 prices = prices.set_index("time")
 prices.index = pd.DatetimeIndex(prices.index)
 prices.to_hdf("data.h5", "data", format="table")
-    
+
 print("imported data to file\n", pd.HDFStore("data.h5"))
-
-

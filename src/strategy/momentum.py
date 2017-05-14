@@ -1,15 +1,11 @@
-<<<<<<< HEAD
-
-=======
+from __future__ import absolute_import
 from src.event import OrderEvent
->>>>>>> Add logger. Change setting files. Init packages. Add __main__.
 import pandas as pd
 import numpy as np
 
 import sys
-sys.path.insert(0, '../')
 
-from event import OrderEvent
+sys.path.insert(0, '../')
 
 """
 Lack position management class,
@@ -31,54 +27,52 @@ class momentumstrat(object):
         if event.type == "TICK":
             self.ticks += 1
             self.data = self.data.append(
-                    pd.DataFrame({"ticks": [self.ticks], "time": [event.time], "ask": [event.ask]}))
+                pd.DataFrame({"ticks": [self.ticks], "time": [event.time], "ask": [event.ask]}))
             self.data.index = pd.DatetimeIndex(self.data["time"])
             resam = self.data.resample("5S").last()
         return resam
 
-    def calculate_signals(self, event, momentum = 12): # momentum = 12 is just a random number
+    def calculate_signals(self, event, momentum=12):  # momentum = 12 is just a random number
         self.position = 0
         if event.type == "TICK":
             self.ticks += 1
             self.data = self.data.append(
-                    pd.DataFrame({"ticks": [self.ticks], "time": [event.time], "ask": [event.ask]}))
+                pd.DataFrame({"ticks": [self.ticks], "time": [event.time], "ask": [event.ask]}))
             self.data.index = pd.DatetimeIndex(self.data["time"])
             resam = self.data.resample("5S").last()
             # collect data frame
-            resam["returns"] = np.log(resam["ask"]/resam["ask"].shift(1))
+            resam["returns"] = np.log(resam["ask"] / resam["ask"].shift(1))
             resam["position"] = np.sign(
-                    resam["returns"].rolling(momentum).mean()).dropna() #TODO: add self.momentum = timeframe
+                resam["returns"].rolling(momentum).mean()).dropna()  # TODO: add self.momentum = timeframe
             print(resam[["time", "ask", "returns", "position"]].tail())
 
-            if resam["position"].ix[-1] == 1: # last position is higher than previous means
-                if self.position == 0: # position of portfolio equals to 0 => buy because no transaction happens before that
+            if resam["position"].ix[-1] == 1:  # last position is higher than previous means
+                if self.position == 0:  # position of portfolio equals to 0 => buy because no transaction happens before that
                     order = OrderEvent(
-                            self.instrument, self.units, "market", "buy"
-                            )
+                        self.instrument, self.units, "market", "buy"
+                    )
                 elif self.position == -1:
                     order = OrderEvent(
-                            self.instrument, 2*self.units, "market", "buy"  #order buy happens when 
-                            )
+                        self.instrument, 2 * self.units, "market", "buy"  # order buy happens when
+                    )
                 else:
                     order = OrderEvent(
-                             self.instrument, 0, "market", "buy"
-                             )
+                        self.instrument, 0, "market", "buy"
+                    )
                 self.position = 1
                 self.events.put(order)
             elif resam["position"].ix[-1] == -1:
                 if self.position == 0:
                     order = OrderEvent(
-                            self.instrument, -self.units, "market", "sell"
-                            )
+                        self.instrument, -self.units, "market", "sell"
+                    )
                 elif self.position == 1:
                     order = OrderEvent(
-                            self.instrument, -2*self.units, "market", "sell"
-                            )
+                        self.instrument, -2 * self.units, "market", "sell"
+                    )
                 else:
                     order = OrderEvent(
-                             self.instrument, 0, "market", "buy"
-                             )
+                        self.instrument, 0, "market", "buy"
+                    )
                 self.position = -1
                 self.events.put(order)
-
-    

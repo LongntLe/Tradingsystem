@@ -1,13 +1,14 @@
+from __future__ import absolute_import
+
+import logging
 import queue
 import threading
 import time
-import logging
-
-from src.execution import Execution
 from definitions import STREAM_DOMAIN, API_DOMAIN, ACCESS_TOKEN, ACCOUNT_ID
+from src.price_handler.streaming import StreamingForexPrices
 from src.risk_manager.portfolio import Portfolio
 from src.strategy.randomstrategy import TestRandomStrategy
-from src.price_handler.streaming import StreamingForexPrices
+from src.execution import Execution
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -31,9 +32,8 @@ def trade(events, strategy, execution, heartbeat):  # temporarily remove portfol
         time.sleep(heartbeat)
 
 
-if __name__ == "__main__":
-    logger = logging.getLogger(__name__)
-    logger.debug("Trading Algorithm has started!")
+def main():
+    logger.info("Trading Algorithm has started!")
     heartbeat = 0.5
     events = queue.Queue()
 
@@ -51,7 +51,8 @@ if __name__ == "__main__":
 
     strategy = TestRandomStrategy(instrument, units, events)
 
-    trade_thread = threading.Thread(target=trade, args=(events, strategy, execution))  # temporarily remove portfolio
+    trade_thread = threading.Thread(target=trade,
+                                    args=(events, strategy, execution, heartbeat))  # temporarily remove portfolio
 
     price_thread = threading.Thread(target=prices.stream_to_queue, args=[])
 
