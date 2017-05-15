@@ -23,12 +23,20 @@ def hurst(p):
     # py.plot(lagvec,tau,'o'); show()
     return hurst
 
-def MDD(data, amount):
-    peak = amount
-    trough = amount
-    for i in range(len(data)):
-        pass
+def MDD(data, amount): # calculating maximum drawdown
+        MDD = 0
+        peak = amount
+        trough = amount
 
+        for i in range(len(data)):
+            if (peak < data[i]):
+                peak = data[i]
+                trough = data[i]
+            elif (trough > data[i]):
+                trough = data[i]
+
+            MDD = min(MDD, (trough-peak)/peak)
+        return MDD
 
 def Johansen():
     pass
