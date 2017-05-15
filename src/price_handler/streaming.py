@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from src.price_handler.price_handler import PriceHandler
 from src.event import TickEvent
 import v20
