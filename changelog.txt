@@ -179,3 +179,8 @@ https://finance.yahoo.com/connection/currency-converter-cache?date=20150307
 
 *statisticaltest.py
 - Add MDD indicator
+
+15/05/2017
+*VectMomentum.py
+- Change from Yahoo finance data to Oanda for intraday data
+
