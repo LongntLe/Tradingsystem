@@ -17,6 +17,7 @@ class SignalEvent(Event):
         self.instrument = instrument
         self.order_type = order_type
         self.side = side
+        self.units = 0
 
 
 class OrderEvent(Event):

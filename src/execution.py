@@ -26,4 +26,7 @@ class Execution(object):
         )
         order = request.get("orderFillTransaction")
         logger.info("Transaction has been done!")
-        logger.debug("%s" % order.dict())
+        logger.info("%s" % order.dict())
+
+    def close_order(self, event):
+        pass
