@@ -192,3 +192,14 @@ Current problem:
 
 *hist.py
 - Group the code into methods
+
+20/05/2017
+*VectMomentum.py
+- Change from Yahoo finance data to Oanda for intraday data
+
+*statisticaltest.py
+- Adds MMI (Market Meanness Index)
+
+22/05/2017
+*statisticaltest.py
+- Adds ADX 

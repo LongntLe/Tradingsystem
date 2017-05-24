@@ -10,7 +10,11 @@ import sys
 
 sys.path.insert(0, '../statistics/')
 
-import src.statistics.statisticaltest as stat  # importing MDD, Hurst
+import statisticaltest as stat  # importing MDD, Hurst
+
+sys.path.insert(0, '../../')
+
+import hist
 
 # implement by chapter 4 in pyalgoquant
 
@@ -35,7 +39,7 @@ class MomVectBacktest(object):
 
 	def get_data(self): #fetching data, this uses yahoo data, but we may use other
 		# will add Oanda data here, use data['ask.o']
-		
+		# raw = hist.data_export()
 		raw = web.DataReader(self.symbol, data_source='yahoo',start=self.start, end=self.end)['Adj Close']
 		raw = pd.DataFrame(raw)
 		raw.rename(columns={'Adj Close': 'price'}, inplace=True)
@@ -84,10 +88,6 @@ class MomVectBacktest(object):
 		plt.show()
 to_plot = ['returns']
 
-for m in ticks:
-    data['position_%d' % m] = np.sign(data['returns'].rolling(m).mean())
-    data['strategy_%d' % m] = data['position_%d' % m].shift(1)*data['returns']
-    to_plot.append('strategy_%d' % m)
 
 if __name__ == '__main__':
     for t in range(len(lookback)):
