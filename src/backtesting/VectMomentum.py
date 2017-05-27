@@ -86,8 +86,6 @@ class MomVectBacktest(object):
 		title = '%s | TC = %.5f' % (self.symbol, self.tc)
 		self.results[['creturns','cstrategy']].plot(title=title,figsize=(10,6))
 		plt.show()
-to_plot = ['returns']
-
 
 if __name__ == '__main__':
     for t in range(len(lookback)):
