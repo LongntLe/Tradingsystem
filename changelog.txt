@@ -200,6 +200,10 @@ Current problem:
 *statisticaltest.py
 - Adds MMI (Market Meanness Index)
 
-22/05/2017
+24/05/2017
 *statisticaltest.py
-- Adds ADX 
+- Adds ADX
+- Fixing Oanda data
+
+27/05/2017
+Added weighted moving average strategy
