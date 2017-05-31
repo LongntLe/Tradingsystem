@@ -216,3 +216,5 @@ Added weighted moving average strategy
 
 *moving-average.py
 - Adding indicators
+
+Add dependencies to readme

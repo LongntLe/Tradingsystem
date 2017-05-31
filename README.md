@@ -34,7 +34,8 @@ Note on Oanda API: http://developer.oanda.com/rest-live-v20/introduction/
 ## Dependencies
 Python 3.5.12 (therefore remember to install Python 3 dependencies)
 
-API used:
+# API used:
+# Core APIs
 - numpy
 ```
 pip3 install numpy
@@ -42,10 +43,6 @@ pip3 install numpy
 - pandas
 ```
 pip3 install pandas
-```
-- Oanda
-```
-pip3 install Oanda
 ```
 - scipy
 ```
@@ -60,6 +57,17 @@ pip3 install statsmodels
 pip3 install queuelib
 ```
 - time
+# Broke APIs
+- Oanda
+```
+pip3 install Oanda
+```
+# Risk managing and strategy developing APIs
+- portfolioopt
+- statsmodels
+- johansen
+
+# Other
 - threading
 - seaborn (for data visualization)
 
