@@ -67,4 +67,5 @@ class MAstrat(object):
                 self.events.put(order)
 
     def control(self,event): # determining when to short vs when to long
-    	pass
+    	# to add another indicator
+        pass

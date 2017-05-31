@@ -12,7 +12,7 @@ sys.path.insert(0, '../statistics/')
 
 import statisticaltest as stat  # importing MDD, Hurst
 
-sys.path.insert(0, '../../')
+sys.path.insert(0, '../')
 
 import hist
 
@@ -39,8 +39,8 @@ class MomVectBacktest(object):
 
 	def get_data(self): #fetching data, this uses yahoo data, but we may use other
 		# will add Oanda data here, use data['ask.o']
-		# raw = hist.data_export()
-		raw = web.DataReader(self.symbol, data_source='yahoo',start=self.start, end=self.end)['Adj Close']
+		raw = hist.data_export()
+		# raw = web.DataReader(self.symbol, data_source='yahoo',start=self.start, end=self.end)['Adj Close']
 		raw = pd.DataFrame(raw)
 		raw.rename(columns={'Adj Close': 'price'}, inplace=True)
 		raw['return'] = np.log(raw/raw.shift(1))

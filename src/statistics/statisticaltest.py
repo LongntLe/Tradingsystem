@@ -1,5 +1,3 @@
-# statistical test
-# R/S test
 import matplotlib.pyplot as py
 from numpy import *
 
@@ -38,9 +36,24 @@ def MDD(data, amount): # calculating maximum drawdown
             MDD = min(MDD, (trough-peak)/peak)
         return MDD
 
-def Johansen():
-    pass
-
+def MMI(data, period): # market meanness index
+    nh, nl = 0
+    sample = pd.DataFrame(data)
+    sample = sample.ix[-period]
+    m = np.median(sample)
+    for i in range(period):
+        if (data[i] > m) and (data[i] > data[i-1]):
+            nl += 1
+        elif (data[i] < m) and (data[i] < data[i-1]):
+            nh += 1
+    return 100*(nl+nh)/(period-1)
+    
+def ALMA(data,period):
+    s = 0
+    sigma = np.stdev(data) # needs to identify which dataframe to calculate STDEV
+    for i in range(period):
+        s += data[i]*np.exp(-(i-offset)**2/sigma**2) # needs to define what is i, offset and sigma
+    
 
 if __name__ == "__main__":
     #  Different types of time series for testing  
