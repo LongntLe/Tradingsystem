@@ -202,8 +202,17 @@ Current problem:
 
 24/05/2017
 *statisticaltest.py
-- Adds ADX
 - Fixing Oanda data
 
 27/05/2017
 Added weighted moving average strategy
+
+30/05/2017
+*VectMomentum.py
+- Reformat Oanda data
+
+*statisticaltest.py
+- Adds ALMA
+
+*moving-average.py
+- Adding indicators

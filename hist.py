@@ -11,7 +11,10 @@ import seaborn as sns
 import pylab
 
 from definitions import ACCESS_TOKEN, ACCOUNT_ID
-#new_hist.py
+
+sys.path.insert(0, '/statistics/')
+
+import statisticaltest.py
 
 #v20.context
 ctx = v20.Context(
@@ -35,39 +38,40 @@ def flatten_dict(d):
             else:
                 yield key, value
     return dict(items())
-#dateTime formatting
-suffix = '.000000000Z'
-time1 = dt.datetime(2008,12,10,0,0,0)
-d1 = time1.isoformat('T') + suffix
-limit = dt.datetime(2009,10,10,0,0,0)
-limit = limit.isoformat('T') + suffix
 
-#data chunking
-prices = pd.DataFrame()
-dates = pd.date_range(start = d1, end = limit, freq = 'D')
-for i in range(len(dates)-1):
-    d1 = str(dates[i]).replace(' ', 'T')
-    d2 = str(dates[i+1]).replace(' ', 'T')
-    candle = ctx.instrument.candles(
-            instrument = 'EUR_USD',
-            fromTime = d1,
-            toTime = d2,
-            granularity = 'S10',
-            price = 'MBA'
-            )
-    data = candle.get('candles')
-    data = [flatten_dict(cs.dict()) for cs in data] #turn data into dict, pretty important
+def data_export():
+    #dateTime formatting
+    suffix = '.000000000Z'
+    time1 = dt.datetime(2008,12,31,0,0,0)
+    time1 = time1.isoformat('T') + suffix
+    limit = dt.datetime(2009,1,1,0,0,0)
+    limit = limit.isoformat('T') + suffix
 
-    print(data)
-    Kappa = pd.DataFrame(data)
-    prices = prices.append(Kappa)
-        #translate the data into dictionary and pandas DataFrame
+    #data chunking
+    prices = pd.DataFrame()
+    dates = pd.date_range(start = time1, end = limit, freq = 'D')
+    for i in range(len(dates)-1):
+        d1 = str(dates[i]).replace(' ', 'T')
+        d2 = str(dates[i+1]).replace(' ', 'T')
+        candle = ctx.instrument.candles(
+                instrument = 'EUR_USD',
+                fromTime = d1,
+                toTime = d2,
+                granularity = 'S10',
+                price = 'MBA'
+                )
+        data = candle.get('candles')
+        data = [flatten_dict(cs.dict()) for cs in data] #turn data into dict, pretty important
+        Kappa = pd.DataFrame(data)
+        prices = prices.append(Kappa)
+    #cleaning data
+    for i in range(prices.shape[0]):
+        prices['ask.o'][i] = int(prices['ask.o'][i])
 
-        #create dataframe    
-#print("data downloaded")
-prices["time"] = pd.to_datetime(prices["time"])
-prices = prices.set_index("time")
-prices.index = pd.DatetimeIndex(prices.index)
-prices.to_hdf("src/database/data_5.h5", "data", format="table")
-    
-print("imported data to file\n", pd.HDFStore("src/database/data_5.h5"))
+    return prices['ask.o']
+
+d = data_export()
+d = pd.DataFrame(d)
+d.rename(columns={'ask.o': 'price'}, inplace=True)
+
+# testing statistical indicators
