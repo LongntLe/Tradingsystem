@@ -17,7 +17,7 @@ As we are yet to have an official name, we will refer to this system as "trading
 Algorithmic trading is an extremely rewarding academic-wise. We have several projects in software engineering, economics, finance mathematics and machine learning for everyone to work on. Here, we have a list of open projects https://docs.google.com/spreadsheets/d/1BJZxA-PRkMm2HwMaKohUK1VaKiOfIIbV8SNgL5QiMrU/edit#gid=0
 
 ## Infra Description: 
-Our system mostly uses Python 3. It is advised for newcomers to have good knowledge in Python and feel comfortable in using Git.
+Our system mostly uses Python 3. It is advised for newcomers to have good knowledge in Python and feel comfortable in using GitHub.
 
 ### Authorization:
 settings.py + pyalgo.cfg: to access trading account. 
@@ -69,6 +69,7 @@ pip3 install scipy
 pip3 install queuelib
 ```
 - time
+
 ### Broker APIs
 - Oanda
 ```
