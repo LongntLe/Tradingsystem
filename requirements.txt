@@ -5,3 +5,6 @@ scipy
 statsmodels
 queuelib
 stock
+portfolioopt
+statsmodels
+johansen
